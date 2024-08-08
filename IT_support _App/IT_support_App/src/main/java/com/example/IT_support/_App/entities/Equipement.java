@@ -22,8 +22,9 @@ public class Equipement {
         private String type;
         @Enumerated(EnumType.STRING)
         private EquipementStatus staus;
-@ManyToOne
-private Equipement equipement;
-@OneToMany
+
+       @OneToMany
         private List<Panne> panns;
+       @ManyToOne
+    private Admin admin;
 }

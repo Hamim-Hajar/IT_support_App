@@ -40,34 +40,17 @@ public class SecurityConfiguration {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            User user = userRepository.findByUsername(username)
+            com.example.IT_support._App.entities.User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            return new org.springframework.security.core.userdetails.User(
-                    user.getUsername(),
-                    user.getPassword(),
-                    user.getAuthorities()
-            );
+            Set<GrantedAuthority> authorities = new HashSet<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
+
+            return user;
         };
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -75,7 +58,8 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())  // Disable CSRF if not needed
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/equipments/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/equipments/user/**").hasAuthority("ROLE_USERSTANDARD")
                         .requestMatchers("/api/tech/**").hasAuthority("ROLE_TECHNICIEN")
                         .requestMatchers("/api/user/**").hasAuthority("ROLE_USERSTANDARD")
                 )
@@ -86,5 +70,14 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-}
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+}

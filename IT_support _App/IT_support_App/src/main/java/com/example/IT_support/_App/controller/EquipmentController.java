@@ -11,37 +11,38 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/equipments")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EquipmentController {
     @Autowired
     private EquipementService equipmentService;
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping("/admin/add")
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Equipement> addEquipment(@RequestBody Equipement equipment) {
         return ResponseEntity.ok(equipmentService.addEquipment(equipment));
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("/admin/update/{id}")
+   // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Equipement> updateEquipment(@PathVariable Long id, @RequestBody Equipement equipment) {
         return ResponseEntity.ok(equipmentService.updateEquipment(id, equipment));
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/admin/delete/{id}")
+   // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteEquipment(@PathVariable Long id) {
         equipmentService.deleteEquipment(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
+    @GetMapping("/admin/get")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<List<Equipement>> getAllEquipments() {
         return ResponseEntity.ok(equipmentService.getAllEquipments());
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
+    @GetMapping("/user/get/{id}")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Equipement> getEquipmentById(@PathVariable Long id) {
         return ResponseEntity.ok(equipmentService.getEquipmentById(id));
     }

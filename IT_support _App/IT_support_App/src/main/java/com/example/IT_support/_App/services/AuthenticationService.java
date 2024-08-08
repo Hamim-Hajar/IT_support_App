@@ -7,10 +7,14 @@ import com.example.IT_support._App.entities.Admin;
 import com.example.IT_support._App.entities.Technicien;
 import com.example.IT_support._App.entities.User;
 import com.example.IT_support._App.entities.UserStandar;
-import com.example.IT_support._App.enums.Role;
+
 import com.example.IT_support._App.repositoreis.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +42,7 @@ public class AuthenticationService {
 //        user.setUsername(input.getUserName());
 //        user.setEmail(input.getEmail());
 //        user.setPassword(passwordEncoder.encode(input.getPassword()));
-//        user.setRole(Role.USER);
+//        user.setRole("USER");
 //        return userRepository.save(user);
 //    }
 public User signup(RegisterUserDto input) {
@@ -72,15 +76,21 @@ public User signup(RegisterUserDto input) {
 
 
 
-    public User authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getUserName(),
-                        input.getPassword()
-                )
-        );
-
-        return userRepository.findByUsername(input.getUserName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public User authenticate(LoginUserDto loginUserDto) throws Exception {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginUserDto.getUsername(), // Assurez-vous que ceci est correct
+                            loginUserDto.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return (User) userDetails; // Assurez-vous que ceci renvoie un objet User approprié
+        } catch (BadCredentialsException e) {
+            throw new Exception("Invalid username or password");
+        }
     }
+
+
 }

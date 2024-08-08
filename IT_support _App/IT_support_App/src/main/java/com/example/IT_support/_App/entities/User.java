@@ -1,6 +1,6 @@
 package com.example.IT_support._App.entities;
 
-import com.example.IT_support._App.enums.Role;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,7 +33,7 @@ public abstract class User implements UserDetails {
     @Column(unique = true, length = 100, nullable = false)
     private String email;
 
-    private String role;  // Ensure this is a String
+    private String role;
 
     private String speciality;
 

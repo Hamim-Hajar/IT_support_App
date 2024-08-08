@@ -10,12 +10,21 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtService jwtService;
@@ -36,20 +45,23 @@ public class AuthenticationController {
 
 
 
+
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+    public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
         try {
-            User authenticatedUser = authenticationService.authenticate(loginUserDto);
-            String jwtToken = jwtService.generateToken(authenticatedUser);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginUserDto.getUsername(),
+                            loginUserDto.getPassword()
+                    )
+            );
 
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setToken(jwtToken);
-            loginResponse.setExpiresIn(jwtService.getExpirationTime());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            return ResponseEntity.ok(loginResponse);
-        } catch (Exception e) {
-            // Gérer les exceptions spécifiques, par exemple, les identifiants invalides
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            String token = jwtService.generateToken((User) authentication.getPrincipal(), ((User) authentication.getPrincipal()).getRole());
+            return ResponseEntity.ok(Collections.singletonMap("token", token));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
 }

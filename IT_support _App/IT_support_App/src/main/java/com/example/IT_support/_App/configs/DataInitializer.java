@@ -2,7 +2,6 @@ package com.example.IT_support._App.configs;
 
 import com.example.IT_support._App.entities.Admin;
 import com.example.IT_support._App.entities.User;
-import com.example.IT_support._App.enums.Role;
 import com.example.IT_support._App.repositoreis.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

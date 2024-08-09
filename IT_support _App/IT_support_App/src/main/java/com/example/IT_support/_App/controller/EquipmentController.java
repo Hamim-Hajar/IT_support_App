@@ -41,7 +41,7 @@ public class EquipmentController {
         return ResponseEntity.ok(equipmentService.getAllEquipments());
     }
 
-    @GetMapping("/user/get/{id}")
+    @GetMapping("/admin/get/{id}")
     //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Equipement> getEquipmentById(@PathVariable Long id) {
         return ResponseEntity.ok(equipmentService.getEquipmentById(id));

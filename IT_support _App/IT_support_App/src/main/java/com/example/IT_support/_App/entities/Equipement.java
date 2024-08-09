@@ -25,6 +25,5 @@ public class Equipement {
 
        @OneToMany
         private List<Panne> panns;
-       @ManyToOne
-    private Admin admin;
+
 }

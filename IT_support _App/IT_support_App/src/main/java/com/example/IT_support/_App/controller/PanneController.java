@@ -16,8 +16,8 @@ public class PanneController {
     @Autowired
     private PanneService panneService;
 
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
+    @PostMapping("/report")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Panne> reportPanne(@RequestBody Panne panne, @RequestParam Long equipmentId) {
         return ResponseEntity.ok(panneService.reportPanne(panne, equipmentId));
     }

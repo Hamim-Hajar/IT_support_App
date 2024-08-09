@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,5 +28,9 @@ public class Panne {
 
     @ManyToOne
     private Equipement equipment;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Ticket> tickets;
+
 }
 

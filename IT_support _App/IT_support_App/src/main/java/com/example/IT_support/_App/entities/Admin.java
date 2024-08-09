@@ -12,7 +12,6 @@ import java.util.List;
 @DiscriminatorValue("admin")
 public class Admin extends User {
 
-@OneToMany
-    private List<Equipement> equipements;
+
 
 }

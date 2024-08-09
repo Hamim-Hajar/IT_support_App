@@ -1,6 +1,7 @@
 package com.example.IT_support._App.entities;
 
 
+import com.example.IT_support._App.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Entity
 @DiscriminatorColumn(name = "user_type")
+
 public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,23 +34,32 @@ public abstract class User implements UserDetails {
     private String password;
     @Column(unique = true, length = 100, nullable = false)
     private String email;
-
-    private String role;
+    @Enumerated(EnumType.STRING)
+   private UserRole role;
 
     private String speciality;
 
-    @Column(name = "user_type", insertable = false, updatable = false)
-    private String userType;
+//    @Column(name = "user_type", insertable = false, updatable = false)
+//    private String userType;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Ticket> tickets;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.toUpperCase()));  // Adjust to use role directly
-        return authorities;
+        if (role == null) {
+            System.out.println("Role is not initialized.");
+            return List.of();
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
+
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        DiscriminatorValue roleAnnotation = this.getClass().getAnnotation(DiscriminatorValue.class);
+//        String roleName = roleAnnotation.value();
+//        return List.of(new SimpleGrantedAuthority("ROLE_" + roleName));}
 
     @Override
     public boolean isAccountNonExpired() {

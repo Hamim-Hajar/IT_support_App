@@ -1,6 +1,7 @@
 package com.example.IT_support._App.dto;
 
 
+import com.example.IT_support._App.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,8 @@ public class RegisterUserDto {
     private String password;
     @NotNull()
     private String user_type;
+    @Getter
+    private UserRole role;
+
+
 }

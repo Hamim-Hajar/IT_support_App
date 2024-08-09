@@ -45,24 +45,36 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
         try {
             final String jwt = authHeader.substring(7);
             final String username = jwtService.extractUsername(jwt);
+            System.out.println("Extracted username: " + username);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null && authentication == null) {
+                System.out.println("Loading user details for: " + username);
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                System.out.println("User details loaded: " + userDetails);
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
                             userDetails.getAuthorities()
                     );
+                    System.out.println("Auth token created: " + authToken);
+                    System.out.println("User authorities: " + userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("Authentication set in SecurityContext");
+                } else {
+                    System.out.println("Token is not valid");
                 }
+            } else {
+                System.out.println("Username is null or authentication already exists");
             }
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            System.err.println("Exception in doFilterInternal: " + exception.getMessage());
+            exception.printStackTrace();
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }
-
 }

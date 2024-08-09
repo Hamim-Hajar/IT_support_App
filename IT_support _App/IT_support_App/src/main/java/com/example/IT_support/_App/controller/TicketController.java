@@ -18,20 +18,20 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PostMapping("/creat")
+   // @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ticketService.createTicket(ticket, user.getId()));
     }
 
-    @PutMapping("/{id}/assign")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("admin/{id}/assign")
+   // @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Ticket> assignTicket(@PathVariable Long id, @RequestParam Long technicienId) {
         return ResponseEntity.ok(ticketService.assignTicket(id, technicienId));
     }
 
     @GetMapping("/technicien/{technicienId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_TECHNICIEN')")
+   // @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_TECHNICIEN')")
     public ResponseEntity<List<Ticket>> getTicketsByTechnicien(@PathVariable Long technicienId) {
         return ResponseEntity.ok(ticketService.getTicketsByTechnicien(technicienId));
     }

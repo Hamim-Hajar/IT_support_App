@@ -29,6 +29,8 @@ public class Ticket {
     private User user;
     @ManyToOne
     private Technicien technicien;
+    @ManyToOne
+    private Panne panne;
 
 
 }

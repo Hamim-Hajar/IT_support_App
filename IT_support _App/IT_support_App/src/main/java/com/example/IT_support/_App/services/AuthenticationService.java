@@ -8,6 +8,7 @@ import com.example.IT_support._App.entities.Technicien;
 import com.example.IT_support._App.entities.User;
 import com.example.IT_support._App.entities.UserStandar;
 
+import com.example.IT_support._App.enums.UserRole;
 import com.example.IT_support._App.repositoreis.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AuthenticationService {
@@ -37,60 +39,50 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-//    public User signup(RegisterUserDto input) {
-//        User user = new Admin();
-//        user.setUsername(input.getUserName());
-//        user.setEmail(input.getEmail());
-//        user.setPassword(passwordEncoder.encode(input.getPassword()));
-//        user.setRole("USER");
-//        return userRepository.save(user);
-//    }
-public User signup(RegisterUserDto input) {
-    if (input == null || input.getUser_type() == null) {
-        throw new IllegalArgumentException("User type cannot be null");
+    public User signup(RegisterUserDto input) {
+        User user;
+
+        switch (input.getRole()) {
+            case UserRole.USER:
+                user = new UserStandar();
+                break;
+            case UserRole.TECHNICIEN:
+                user = new Technicien();
+                break;
+            case UserRole.ADMIN:
+                user = new Admin();
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid user role");
+        }
+
+        user.setUsername(input.getUserName());
+        user.setEmail(input.getEmail());
+        user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setRole(input.getRole());
+
+        return userRepository.save(user);
     }
-
-    User user;
-    String userType = input.getUser_type().toLowerCase();
-
-    switch (userType) {
-        case "admin":
-            user = new Admin();
-            user.setRole("ADMIN");
-            break;
-        case "tech":
-            user = new Technicien();
-            user.setRole("TECHNICIEN");
-            break;
-        default:
-            user = new UserStandar();
-            user.setRole("USER");
-    }
-
-    user.setUsername(input.getUserName());
-    user.setEmail(input.getEmail());
-    user.setPassword(passwordEncoder.encode(input.getPassword()));
-
-    return userRepository.save(user);
-}
-
-
-
-    public User authenticate(LoginUserDto loginUserDto) throws Exception {
+    public User authenticate(LoginUserDto input) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginUserDto.getUsername(), // Assurez-vous que ceci est correct
-                            loginUserDto.getPassword()
+                            input.getUserName(),
+                            input.getPassword()
                     )
             );
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return (User) userDetails; // Assurez-vous que ceci renvoie un objet User approprié
+
+            User user = userRepository.findByUsername(input.getUserName());
+            if (user == null) {
+                throw new UsernameNotFoundException("User not found with username: " + input.getUserName());
+            }
+            return user;
         } catch (BadCredentialsException e) {
-            throw new Exception("Invalid username or password");
+            throw new BadCredentialsException("Invalid username or password");
+        } catch (Exception e) {
+            throw new RuntimeException("Authentication failed: " + e.getMessage(), e);
         }
     }
-
-
 }

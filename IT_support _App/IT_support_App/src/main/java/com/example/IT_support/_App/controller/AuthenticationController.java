@@ -4,6 +4,7 @@ import com.example.IT_support._App.dto.LoginUserDto;
 import com.example.IT_support._App.dto.RegisterUserDto;
 import com.example.IT_support._App.entities.LoginResponse;
 import com.example.IT_support._App.entities.User;
+import com.example.IT_support._App.enums.UserRole;
 import com.example.IT_support._App.services.AuthenticationService;
 import com.example.IT_support._App.services.JwtService;
 import jakarta.validation.Valid;
@@ -19,13 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
-@RestController
 @RequestMapping("/api/auth")
+@RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtService jwtService;
 
@@ -33,35 +31,26 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
-        try {
-            User user = authenticationService.signup(registerUserDto);
-            return ResponseEntity.ok(user);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+
+        User registeredUser = authenticationService.signup(registerUserDto);
+
+        return ResponseEntity.ok(registeredUser);
     }
-
-
-
-
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginUserDto.getUsername(),
-                            loginUserDto.getPassword()
-                    )
-            );
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) throws Exception {
+        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+        UserRole userrole = authenticatedUser.getRole();
+        System.out.println(userrole);
+        String jwtToken = jwtService.generateToken(authenticatedUser, userrole);
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(jwtToken);
+        loginResponse.setExpiresIn(jwtService.getExpirationTime());
 
-            String token = jwtService.generateToken((User) authentication.getPrincipal(), ((User) authentication.getPrincipal()).getRole());
-            return ResponseEntity.ok(Collections.singletonMap("token", token));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        }
+        return ResponseEntity.ok(loginResponse);
     }
+
+
 }

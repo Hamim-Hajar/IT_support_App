@@ -23,7 +23,8 @@ public class Equipement {
         @Enumerated(EnumType.STRING)
         private EquipementStatus staus;
 
-       @OneToMany
+
+       @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<Panne> panns;
 
 }

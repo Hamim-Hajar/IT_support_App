@@ -42,10 +42,6 @@ public abstract class User implements UserDetails {
 //    @Column(name = "user_type", insertable = false, updatable = false)
 //    private String userType;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Ticket> tickets;
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (role == null) {

@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/equipments/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/equipments/admin/add").hasRole("ADMIN")
                         .requestMatchers("/api/tickets/**").permitAll()
                         .requestMatchers("/api/pannes/**").permitAll()
                         .requestMatchers("/api/reservations/admin/**").hasAuthority("ROLE_ADMIN")

@@ -1,6 +1,8 @@
 package com.example.IT_support._App.entities;
 
 import com.example.IT_support._App.enums.PanneStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,9 +29,11 @@ public class Panne {
     private PanneStatus etatReparation;
 
     @ManyToOne
+    @JoinColumn(name = "equipment_id")
+    @JsonIgnore
     private Equipement equipment;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "panne", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets;
 
 }

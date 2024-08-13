@@ -1,6 +1,8 @@
 package com.example.IT_support._App.entities;
 
 import com.example.IT_support._App.enums.TiketStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +31,10 @@ public class Ticket {
     private User user;
     @ManyToOne
     private Technicien technicien;
+
+    @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "panne_id")
     private Panne panne;
 
 

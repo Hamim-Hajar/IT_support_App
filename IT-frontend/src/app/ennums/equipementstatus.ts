@@ -1,0 +1,6 @@
+export enum Equipementstatus {
+  FUNCTIONAL = 'FUNCTIONAL',
+  BREAKDOWN = 'BREAKDOWN',
+  UNDERREPAIR = 'UNDERREPAIR',
+  OUT_OF_SERVICE = 'OUT_OF_SERVICE'
+}

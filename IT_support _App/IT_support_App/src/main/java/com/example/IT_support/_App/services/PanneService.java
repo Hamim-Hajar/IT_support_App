@@ -7,9 +7,12 @@ import com.example.IT_support._App.enums.PanneStatus;
 import com.example.IT_support._App.exception.ResourceNotFoundException;
 import com.example.IT_support._App.repositoreis.EquipementRepository;
 import com.example.IT_support._App.repositoreis.PanneRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,8 +23,8 @@ public class PanneService {
     @Autowired
     private EquipementRepository equipmentRepository;
 
-    public Panne reportPanne(Panne panne, Long equipmentId) {
-        Equipement equipment = equipmentRepository.findById(equipmentId)
+    public Panne reportPanne(Panne panne, Long id) {
+        Equipement equipment = equipmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment not found"));
         panne.setEquipment(equipment);
         panne.setEtatReparation(PanneStatus.REPORTED);
@@ -65,4 +68,5 @@ public class PanneService {
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment not found"));
         return panneRepository.findByEquipmentOrderByDatePanneDesc(equipment);
     }
+
 }

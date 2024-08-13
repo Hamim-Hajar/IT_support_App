@@ -1,0 +1,6 @@
+export enum Pannestatus {
+REPORTED = 'REPORTED',
+  IN_DIAGNOSIS = 'IN_DIAGNOSIS',
+  IN_REPAIR = 'IN_REPAIR',
+  RESOLVED = 'RESOLVED'
+}

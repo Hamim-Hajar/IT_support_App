@@ -15,7 +15,6 @@ public class EquipementService {
         private EquipementRepository equipementRepository;
 
         public Equipement addEquipment(Equipement equipment) {
-            equipment.setStaus(EquipementStatus.FUNCTIONAL);
             return equipementRepository.save(equipment);
         }
 

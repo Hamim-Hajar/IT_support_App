@@ -9,19 +9,20 @@ export class Ticket {
   description: string;
   dateCreation: Date;
   status: Ticketstatus;
-  user: User;
-  technicien: Technicien;
-  panne: Panne;
+
+  user: User | null;
+  technicien: Technicien | null;
+  panne: Panne | null;
 
   constructor(
-    id: number,
     title: string,
     description: string,
-    dateCreation: Date,
     status: Ticketstatus,
     user: User,
     technicien: Technicien,
-    panne: Panne
+    panne: Panne,
+    id: number,
+    dateCreation: Date
   ) {
     this.id = id;
     this.title = title;

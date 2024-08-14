@@ -1,3 +1,17 @@
-<app-header></app-header>
-<app-add-equipment></app-add-equipment>
-<app-footer></app-footer>
+
+<div class="sale-dashboard">
+  <main class="frame">
+    <app-header></app-header>
+    <div style="background-color: red"></div>
+    <div style="display: flex; flex-direction: column; gap: 15px; ">
+      <div style="display: flex; flex-direction: row; gap: 30px; ">
+
+       <app-side-bar></app-side-bar>
+        <ng-container >
+         <div style="margin-top:5%;"> <app-add-equipment></app-add-equipment></div>
+        </ng-container>
+      </div>
+      <app-footer></app-footer>
+    </div>
+  </main>
+</div>

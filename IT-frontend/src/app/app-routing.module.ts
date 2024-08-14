@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'equipement-list', component: EquipmentListComponent},
   {path :'edit-equipment/:id', component: AddEquipmentComponent},
 
-  { path: '', redirectTo: 'home2', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({

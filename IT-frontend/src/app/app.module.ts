@@ -21,6 +21,7 @@ import { Home2Component } from './Compenents/shared/home2/home2.component';
 import { FooterComponent } from './Compenents/shared/footer/footer.component';
 import {authInterceptorInterceptor} from "./interceptors/auth-interseptor.service";
 import {AddEquipmentComponent} from "./Compenents/equipment/add-equipment/add-equipment.component";
+import { SideBarComponent } from './Compenents/shared/side-bar/side-bar.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {AddEquipmentComponent} from "./Compenents/equipment/add-equipment/add-eq
     Home2Component,
     FooterComponent,
     AddEquipmentComponent,
+    SideBarComponent,
   ],
   imports: [
     BrowserModule,

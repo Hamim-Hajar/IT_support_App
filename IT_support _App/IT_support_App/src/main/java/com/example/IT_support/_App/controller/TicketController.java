@@ -14,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tickets")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @PostMapping("/creat")
-   // @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PostMapping("/create")
     public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ticketService.createTicket(ticket, user.getId()));
     }

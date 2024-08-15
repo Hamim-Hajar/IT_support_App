@@ -1,1 +1,17 @@
-<p>user-ticket-list works!</p>
+<div *ngIf="tickets.length > 0; else noTickets" class="ticket-list-container">
+  <h2 class="ticket-list-title">Your Tickets</h2>
+  <ul class="ticket-list">
+    <li *ngFor="let ticket of tickets" class="ticket-item">
+      <div class="ticket-header">
+        <h3 class="ticket-title">{{ ticket.title }}</h3>
+        <span class="ticket-status">{{ ticket.status }}</span>
+      </div>
+      <p class="ticket-description">{{ ticket.description }}</p>
+      <p class="ticket-date">ticket status: {{ ticket.status  }}</p>
+
+    </li>
+  </ul>
+</div>
+<ng-template #noTickets>
+  <p class="no-tickets-message">No tickets found.</p>
+</ng-template>

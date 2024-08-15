@@ -33,9 +33,6 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/equipments/admin/add").hasRole("ADMIN")
                         .requestMatchers("/api/tickets/**").permitAll()
                         .requestMatchers("/api/pannes/**").permitAll()
-                        .requestMatchers("/api/reservations/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/events/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        .requestMatchers("/api/events/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

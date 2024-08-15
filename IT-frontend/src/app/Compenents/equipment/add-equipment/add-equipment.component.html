@@ -1,6 +1,9 @@
 <div class="card">
   <form [formGroup]="formEquipment" (ngSubmit)="onSubmit()">
     <div class="form-group">
+      <ng-container >
+        <div style="margin-top:5%;"> <img src="assets/public/photo1.jpg"style="height: 100px;width: 200px"></div>
+      </ng-container>
       <textarea id="nome" formControlName="nome" placeholder="Name"></textarea>
     </div>
     <div class="form-group">

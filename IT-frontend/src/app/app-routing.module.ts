@@ -6,6 +6,7 @@ import {HomeComponent} from "./Compenents/shared/home/home.component";
 import {EquipmentListComponent} from "./Compenents/equipment/equipment-list/equipment-list.component";
 import {Home2Component} from "./Compenents/shared/home2/home2.component";
 import {AddEquipmentComponent} from "./Compenents/equipment/add-equipment/add-equipment.component";
+import {UserTicketListComponent} from "./Compenents/ticket/user-ticket-list/user-ticket-list.component";
 
 const routes: Routes = [
   {path:'dashboard',component: DashboardComponent},
@@ -14,7 +15,7 @@ const routes: Routes = [
   {path: 'home2', component: Home2Component},
   { path: 'equipement-list', component: EquipmentListComponent},
   {path :'edit-equipment/:id', component: AddEquipmentComponent},
-
+  {path: 'user-tickets', component: UserTicketListComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 

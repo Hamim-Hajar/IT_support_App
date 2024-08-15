@@ -28,20 +28,15 @@ export class SupportTicketFormComponent implements OnInit {
   initializeForm() {
     this.ticketForm = this.fb.group({
       title: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      priority: ['', Validators.required]
     });
   }
 
   onSubmit(): void {
     if (this.ticketForm.valid) {
-      const { title, description } = this.ticketForm.value;
-      const newTicket: Partial<Ticket> = {
-        title,
-        description
-        // No need to set status or user here, they'll be handled by the backend
-      };
-
-      this.ticketService.createTicket(newTicket as Ticket).subscribe(
+      const newTicket: Ticket = this.ticketForm.value;
+      this.ticketService.createTicket(newTicket).subscribe(
         (createdTicket) => {
           console.log('Ticket created:', createdTicket);
           this.ticketForm.reset();
@@ -50,8 +45,6 @@ export class SupportTicketFormComponent implements OnInit {
           console.error('Error creating ticket:', error);
         }
       );
-    } else {
-      console.error('Form is invalid');
     }
   }
 }

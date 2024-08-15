@@ -28,4 +28,8 @@ export class AuthService {
   login(loginUser: Loginuserdto): Observable<Loginresponce> {
     return this.http.post<Loginresponce>(`${this.apiUrl}/login`, loginUser);
   }
+  getCurrentUserId(): number | null {
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    return user?.id ;
+  }
 }

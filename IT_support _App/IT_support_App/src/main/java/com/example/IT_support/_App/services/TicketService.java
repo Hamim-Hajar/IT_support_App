@@ -57,9 +57,15 @@ public class TicketService {
         return ticketRepository.findByTechnicien(technicien);
     }
 
+
     public List<Ticket> getTicketsByUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return ticketRepository.findByUser(user);
+    }
+    public void deleteTicket(Long id) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
+        ticketRepository.delete(ticket);
     }
 }

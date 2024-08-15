@@ -36,9 +36,14 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getTicketsByTechnicien(technicienId));
     }
 
-    @GetMapping("/user")
+    @GetMapping("/usr")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<Ticket>> getTicketsByUser(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(ticketService.getTicketsByUser(user.getId()));
+    }
+    @GetMapping("/user")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<List<Ticket>> getAllTicketsByUser(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(ticketService.getTicketsByUser(user.getId()));
     }
 
@@ -52,5 +57,11 @@ public class TicketController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Ticket>> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
+    }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_TECHNICIEN')")
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
+        ticketService.deleteTicket(id);
+        return ResponseEntity.noContent().build();
     }
 }
